@@ -17,25 +17,39 @@ namespace Mastermind
     public partial class MainWindow : Window
     {
 
-        private List<(string, SolidColorBrush)> _colorOptions = new List<(string, SolidColorBrush)>();
-        private List<(string, SolidColorBrush)> _generatedColors = new List<(string, SolidColorBrush)>();
-        private List<(string, SolidColorBrush)> _selectedColors = new List<(string, SolidColorBrush)>();
+        private List<(string name, SolidColorBrush color)> _colorOptions = new List<(string, SolidColorBrush)>();
+        private List<(string name, SolidColorBrush color)> _generatedColors = new List<(string, SolidColorBrush)>();
+        private List<(string name, SolidColorBrush color)> _selectedColors = new List<(string, SolidColorBrush)>();
+
+        private List<ComboBox> comboBoxes = new List<ComboBox>();
 
         public MainWindow()
         {
             InitializeComponent();
-
             InitGame();
         }
 
         private void InitGame()
         {
-            _colorOptions.Add(("red", new SolidColorBrush(Colors.Red)));
-            _colorOptions.Add(("orange", new SolidColorBrush(Colors.Orange)));
-            _colorOptions.Add(("yellow", new SolidColorBrush(Colors.Yellow)));
-            _colorOptions.Add(("white", new SolidColorBrush(Colors.White)));
-            _colorOptions.Add(("green", new SolidColorBrush(Colors.Green)));
-            _colorOptions.Add(("blue", new SolidColorBrush(Colors.Blue)));
+            _colorOptions.Add(("Red", new SolidColorBrush(Colors.Red)));
+            _colorOptions.Add(("Orange", new SolidColorBrush(Colors.Orange)));
+            _colorOptions.Add(("Yellow", new SolidColorBrush(Colors.Yellow)));
+            _colorOptions.Add(("White", new SolidColorBrush(Colors.White)));
+            _colorOptions.Add(("Green", new SolidColorBrush(Colors.Green)));
+            _colorOptions.Add(("Blue", new SolidColorBrush(Colors.Blue)));
+
+            comboBoxes.Add(choose1Combobox);
+            comboBoxes.Add(choose2Combobox);
+            comboBoxes.Add(choose3Combobox);
+            comboBoxes.Add(choose4Combobox);
+
+            for (int i = 0; i < comboBoxes.Count(); i++)
+            {
+                for (int j = 0; j < _colorOptions.Count; j++)
+                {
+                    comboBoxes[i].Items.Add(_colorOptions[j].name);
+                }
+            }
         }
 
         private void validateButton_Click(object sender, RoutedEventArgs e)
