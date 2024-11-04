@@ -1,0 +1,25 @@
+﻿<Window x:Class="Mastermind.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Mastermind"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+
+        <ComboBox x:Name="choose1Combobox" HorizontalAlignment="Left" Margin="95,159,0,0" VerticalAlignment="Top" Width="120"/>
+        <ComboBox x:Name="choose2Combobox" HorizontalAlignment="Left" Margin="248,159,0,0" VerticalAlignment="Top" Width="120"/>
+        <ComboBox x:Name="choose3Combobox" HorizontalAlignment="Left" Margin="407,159,0,0" VerticalAlignment="Top" Width="120"/>
+        <ComboBox x:Name="choose4Combobox" HorizontalAlignment="Left" Margin="577,159,0,0" VerticalAlignment="Top" Width="120"/>
+        <Button x:Name="validateButton" Content="Check code" HorizontalAlignment="Left" Margin="273,217,0,0" VerticalAlignment="Top" Width="224" Foreground="White" FontSize="18" FontWeight="Bold" FontFamily="Verdana" Height="37" BorderThickness="0,0,0,0" Click="validateButton_Click">
+            <Button.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF19B5FC"/>
+                    <GradientStop Color="#FF2C1C61" Offset="1"/>
+                </LinearGradientBrush>
+            </Button.Background>
+        </Button>
+
+    </Grid>
+</Window>
