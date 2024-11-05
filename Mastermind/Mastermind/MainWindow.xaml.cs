@@ -18,9 +18,7 @@ namespace Mastermind
     {
 
         private List<(string name, SolidColorBrush color)> _colorOptions = new List<(string, SolidColorBrush)>();
-        private List<(string name, SolidColorBrush color)> _generatedColors = new List<(string, SolidColorBrush)>();
-        private List<(string name, SolidColorBrush color)> _selectedColors = new List<(string, SolidColorBrush)>();
-
+        private List<Label> _labels = new List<Label>();
         private List<ComboBox> comboBoxes = new List<ComboBox>();
 
         public MainWindow()
@@ -38,10 +36,15 @@ namespace Mastermind
             _colorOptions.Add(("Green", new SolidColorBrush(Colors.Green)));
             _colorOptions.Add(("Blue", new SolidColorBrush(Colors.Blue)));
 
-            comboBoxes.Add(choose1Combobox);
-            comboBoxes.Add(choose2Combobox);
-            comboBoxes.Add(choose3Combobox);
-            comboBoxes.Add(choose4Combobox);
+            comboBoxes.Add(chooseCombobox1);
+            comboBoxes.Add(chooseCombobox2);
+            comboBoxes.Add(chooseCombobox3);
+            comboBoxes.Add(chooseCombobox4);
+
+            _labels.Add(chooseLabel1);
+            _labels.Add(chooseLabel2);
+            _labels.Add(chooseLabel3);
+            _labels.Add(chooseLabel4);
 
             for (int i = 0; i < comboBoxes.Count(); i++)
             {
@@ -49,7 +52,10 @@ namespace Mastermind
                 {
                     comboBoxes[i].Items.Add(_colorOptions[j].name);
                 }
+
+                comboBoxes[i].SelectionChanged += (obj, args) => { OnDropdownSelection(obj, args); };
             }
+
         }
 
         private void validateButton_Click(object sender, RoutedEventArgs e)
@@ -59,6 +65,7 @@ namespace Mastermind
             {
                 string selectedColorString = string.Join(',', selectedColors.Select(x => x.name));
                 mainWindow.Title = $"Mastermind ({selectedColorString})";
+
             }
         }
 
@@ -78,10 +85,24 @@ namespace Mastermind
             return selectedOptions;
         }
 
+        private void OnDropdownSelection(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBox? comboBox = sender as ComboBox;
+            if (comboBox == null || string.IsNullOrEmpty(comboBox.Name))
+                return; 
 
+            Label? foundLabel = _labels.FirstOrDefault(x => x.Name.EndsWith(comboBox.Name.Last()));
+            if (foundLabel != null)
+            {
+                (string name, SolidColorBrush color) foundColor = 
+                    _colorOptions.FirstOrDefault(x => x.name == comboBox.SelectedValue.ToString());
+                if (foundColor != default)
+                {
+                    foundLabel.Background = foundColor.color;
+                }
+            }
 
-
-
+        }
 
 
     }
