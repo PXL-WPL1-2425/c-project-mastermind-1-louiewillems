@@ -1,25 +1,23 @@
-﻿using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Mastermind
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
 
-        private List<(string name, SolidColorBrush color)> _colorOptions = new List<(string, SolidColorBrush)>();
+        private List<(string name, SolidColorBrush color)> _colorOptions = new List<(string, SolidColorBrush)>()
+        {
+            ("Red", Brushes.Red),
+            ("Orange", Brushes.Orange),
+            ("Yellow", Brushes.Yellow),
+            ("White", Brushes.White),
+            ("Green", Brushes.Green),
+            ("Blue", Brushes.Blue)
+        };
         private List<Label> _labels = new List<Label>();
-        private List<ComboBox> comboBoxes = new List<ComboBox>();
+        private List<ComboBox> _comboBoxes = new List<ComboBox>();
 
         public MainWindow()
         {
@@ -29,43 +27,35 @@ namespace Mastermind
 
         private void InitGame()
         {
-            _colorOptions.Add(("Red", new SolidColorBrush(Colors.Red)));
-            _colorOptions.Add(("Orange", new SolidColorBrush(Colors.Orange)));
-            _colorOptions.Add(("Yellow", new SolidColorBrush(Colors.Yellow)));
-            _colorOptions.Add(("White", new SolidColorBrush(Colors.White)));
-            _colorOptions.Add(("Green", new SolidColorBrush(Colors.Green)));
-            _colorOptions.Add(("Blue", new SolidColorBrush(Colors.Blue)));
+            mainWindow.Title = "Mastermind";
+            _comboBoxes.AddRange(new List<ComboBox>() { chooseCombobox1, chooseCombobox2, chooseCombobox3, chooseCombobox4 });
+            _labels.AddRange(new List<Label>() { chooseLabel1, chooseLabel2, chooseLabel3, chooseLabel4 });
 
-            comboBoxes.Add(chooseCombobox1);
-            comboBoxes.Add(chooseCombobox2);
-            comboBoxes.Add(chooseCombobox3);
-            comboBoxes.Add(chooseCombobox4);
-
-            _labels.Add(chooseLabel1);
-            _labels.Add(chooseLabel2);
-            _labels.Add(chooseLabel3);
-            _labels.Add(chooseLabel4);
-
-            for (int i = 0; i < comboBoxes.Count(); i++)
+            for (int i = 0; i < _comboBoxes.Count(); i++)
             {
                 for (int j = 0; j < _colorOptions.Count; j++)
                 {
-                    comboBoxes[i].Items.Add(_colorOptions[j].name);
+                    _comboBoxes[i].Items.Add(_colorOptions[j].name);
                 }
 
-                comboBoxes[i].SelectionChanged += (obj, args) => { OnDropdownSelection(obj, args); };
+                _comboBoxes[i].SelectionChanged += (obj, args) => { OnDropdownSelection(obj, args); };
             }
 
         }
 
         private void validateButton_Click(object sender, RoutedEventArgs e)
         {
+            ClearGame(onlyLabels: true);
+
             List<(string name, SolidColorBrush color)> selectedColors = GenerateRandomColorCodes();
             if (selectedColors.Any() && selectedColors.Count == 4)
             {
                 string selectedColorString = string.Join(',', selectedColors.Select(x => x.name));
                 mainWindow.Title = $"Mastermind ({selectedColorString})";
 
+                ControlColors(selectedColors.Select(x => x.name).ToArray());
+
+                //TODO: show correct colors
             }
         }
 
@@ -73,37 +63,90 @@ namespace Mastermind
         {
             List<(string, SolidColorBrush)> selectedOptions = new List<(string, SolidColorBrush)>();
 
+            var rand = new Random();
             for (int i = 0; i < 4; i++)
             {
-                (string, SolidColorBrush) keyPair = _colorOptions.ElementAt(new Random().Next(0, _colorOptions.Count()));
-                if (keyPair != default)
+                if (_colorOptions.ElementAt(rand.Next(0, _colorOptions.Count()))
+                    is (string, SolidColorBrush) keyPair)
                 {
                     selectedOptions.Add(keyPair);
                 }
             }
-
             return selectedOptions;
         }
 
         private void OnDropdownSelection(object sender, SelectionChangedEventArgs e)
         {
-            ComboBox? comboBox = sender as ComboBox;
-            if (comboBox == null || string.IsNullOrEmpty(comboBox.Name))
-                return; 
-
-            Label? foundLabel = _labels.FirstOrDefault(x => x.Name.EndsWith(comboBox.Name.Last()));
-            if (foundLabel != null)
+            if (sender is ComboBox comboBox)
             {
-                (string name, SolidColorBrush color) foundColor = 
-                    _colorOptions.FirstOrDefault(x => x.name == comboBox.SelectedValue.ToString());
-                if (foundColor != default)
+                if (_labels.FirstOrDefault(x => x.Name.EndsWith(comboBox.Name.Last())) is Label foundLabel)
                 {
-                    foundLabel.Background = foundColor.color;
+                    if (_colorOptions.FirstOrDefault(x => x.name == comboBox.SelectedValue.ToString())
+                            is (string name, SolidColorBrush color) foundColor)
+                    {
+                        foundLabel.Background = foundColor.color;
+                        foundLabel.BorderThickness = new Thickness(0.3);
+                        foundLabel.BorderBrush = Brushes.Gray;
+                    }
                 }
             }
 
         }
 
+        private void ControlColors(string[] correctColors)
+        {
+            if (_comboBoxes.Any(x => x.SelectedValue == null))
+            {
+                MessageBox.Show("Some values are not selected", "Invalid input", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            int boxIndex = 0;
+            _comboBoxes.ForEach(box =>
+            {
+                if (box.SelectedValue is string value &&
+                    _labels.FirstOrDefault(x => x.Name.EndsWith(box.Name.Last())) is Label foundLabel)
+                {
+                    if (correctColors.Contains(box.SelectedValue.ToString()))
+                    {
+                        foundLabel.BorderThickness = new Thickness(3);
+                        foundLabel.BorderBrush = Brushes.Wheat;
+                        if (value.Equals(correctColors[boxIndex]))
+                        {
+                            foundLabel.BorderBrush = Brushes.DarkRed;
+                        }
+                    }
+                }
+                boxIndex++;
+            });
+
+        }
+        private void ClearGame(bool onlyLabels = false)
+        {
+            //clear labels
+            _labels.ForEach(label =>
+            {
+                label.BorderThickness = new Thickness(0.3);
+                label.BorderBrush = Brushes.Gray;
+
+                if (!onlyLabels)
+                {
+                    label.BorderThickness = new Thickness(0);
+                    label.BorderBrush = null;
+                    label.Background = null;
+                }
+            });
+
+            //clear boxes
+            if (!onlyLabels)
+            {
+                _comboBoxes.ForEach(box =>
+                {
+                    box.SelectedValue = null;
+                });
+            }
+
+            mainWindow.Title = "Mastermind";
+        }
 
     }
 }

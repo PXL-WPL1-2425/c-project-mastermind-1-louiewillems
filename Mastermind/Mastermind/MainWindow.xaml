@@ -24,10 +24,10 @@
                 </LinearGradientBrush>
             </Button.Background>
         </Button>
-        <Label x:Name="chooseLabel1" Content="" HorizontalAlignment="Left" Margin="106,106,0,0" VerticalAlignment="Top" Width="115" Height="70" BorderThickness="2" BorderBrush="AntiqueWhite" />
-        <Label x:Name="chooseLabel2" Content="" HorizontalAlignment="Left" Margin="259,106,0,0" VerticalAlignment="Top" Width="115" Height="70" BorderThickness="2" BorderBrush="AntiqueWhite"/>
-        <Label x:Name="chooseLabel3" Content="" HorizontalAlignment="Left" Margin="418,106,0,0" VerticalAlignment="Top" Width="115" Height="70" BorderThickness="2" BorderBrush="AntiqueWhite"/>
-        <Label x:Name="chooseLabel4" Content="" HorizontalAlignment="Left" Margin="577,106,0,0" VerticalAlignment="Top" Width="115" Height="70" BorderThickness="2" BorderBrush="AntiqueWhite"/>
+        <Label x:Name="chooseLabel1" Content="" HorizontalAlignment="Left" Margin="106,106,0,0" VerticalAlignment="Top" Width="115" Height="70" />
+        <Label x:Name="chooseLabel2" Content="" HorizontalAlignment="Left" Margin="259,106,0,0" VerticalAlignment="Top" Width="115" Height="70" />
+        <Label x:Name="chooseLabel3" Content="" HorizontalAlignment="Left" Margin="418,106,0,0" VerticalAlignment="Top" Width="115" Height="70" />
+        <Label x:Name="chooseLabel4" Content="" HorizontalAlignment="Left" Margin="577,106,0,0" VerticalAlignment="Top" Width="115" Height="70" />
        
 
     </Grid>
