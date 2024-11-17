@@ -7,7 +7,7 @@ namespace Mastermind
     public partial class MainWindow : Window
     {
 
-        private List<(string name, SolidColorBrush color)> _colorOptions = new List<(string, SolidColorBrush)>()
+        private readonly List<(string name, SolidColorBrush color)> _colorOptions = new List<(string, SolidColorBrush)>()
         {
             ("Red", Brushes.Red),
             ("Orange", Brushes.Orange),
@@ -16,8 +16,8 @@ namespace Mastermind
             ("Green", Brushes.Green),
             ("Blue", Brushes.Blue)
         };
-        private List<Label> _labels = new List<Label>();
-        private List<ComboBox> _comboBoxes = new List<ComboBox>();
+        private readonly List<Label> _labels = new List<Label>();
+        private readonly List<ComboBox> _comboBoxes = new List<ComboBox>();
 
         public MainWindow()
         {
@@ -38,7 +38,7 @@ namespace Mastermind
                     _comboBoxes[i].Items.Add(_colorOptions[j].name);
                 }
 
-                _comboBoxes[i].SelectionChanged += (obj, args) => { OnDropdownSelection(obj, args); };
+                _comboBoxes[i].SelectionChanged += OnDropdownSelection;
             }
 
         }
